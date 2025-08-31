@@ -1,0 +1,211 @@
+@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Inter', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    
+    /* School Brand Colors - Logo-Based Color Scheme */
+    --color-header-blue: #113F67;        /* Primary: Deep Blue - Header background */
+    --color-nav-sky-blue: #113F67;       /* Primary: Deep Blue - Navigation background */
+    --color-hero-sky-blue: #58A0C8;      /* Secondary: Sky Blue - Hero section background */
+    --color-link-hover-blue: #58A0C8;    /* Secondary: Sky Blue - Link hover state */
+    --color-cta-blue: #113F67;           /* Primary: Deep Blue - Call-to-action button */
+    --color-divider-blue: #113F67;       /* Primary: Deep Blue - Section dividers */
+    --color-divider-sky-blue: #58A0C8;   /* Secondary: Sky Blue - Alternate dividers */
+    --color-footer-black: #000000;       /* Accent: Black - Footer background */
+    
+    /* Text Colors */
+    --color-text-white: #FFFFFF;         /* Neutral: White text */
+    --color-text-black: #000000;         /* Accent: Black text */
+    --color-text-sky-blue: #58A0C8;      /* Secondary: Sky Blue text/tagline */
+    --color-text-light-gray: #d1d5db;    /* Light gray for copyright */
+    
+    /* Legacy colors for compatibility - Updated to Logo Colors */
+    --color-school-blue: #113F67;        /* Primary: Deep Blue */
+    --color-school-blue-light: #58A0C8;  /* Secondary: Sky Blue */
+    --color-school-blue-dark: #0a2a47;   /* Darker Primary for hover states */
+    --color-school-green: #059669;       /* Keep existing green for accent */
+    --color-school-green-light: #10b981; /* Keep existing light green */
+    --color-school-gold: #f59e0b;        /* Keep existing gold for accent */
+    --color-school-gold-light: #fbbf24;  /* Keep existing light gold */
+    
+    /* Additional Design Tokens - Updated */
+    --color-accent-orange: #ea580c;
+    --color-text-primary: #000000;       /* Accent: Black for primary text */
+    --color-text-secondary: #6b7280;     /* Keep gray for secondary text */
+    --color-bg-light: #f9fafb;           /* Light background */
+    --color-bg-section: #FFFFFF;         /* Neutral: White section background */
+    
+    /* Custom Spacing */
+    --spacing-section: 6rem;
+    --spacing-container: 1.5rem;
+    
+    /* Border Radius */
+    --radius-card: 1rem;
+    --radius-button: 0.5rem;
+}
+
+/* Custom Components */
+.btn-primary {
+    background-color: var(--color-school-blue);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-button);
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-school-blue-dark);
+    color: white;
+    transform: translateY(-0.125rem);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+    background-color: var(--color-cta-blue);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-button);
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-school-blue-dark);
+    color: white;
+    transform: translateY(-0.125rem);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Dividers for Layout Base */
+.section-divider-blue {
+    border-top: 2px solid var(--color-divider-blue);
+}
+
+.section-divider-sky-blue {
+    border-top: 2px solid var(--color-divider-sky-blue);
+}
+
+.section-block-blue {
+    background-color: var(--color-divider-blue);
+    height: 4px;
+}
+
+.section-block-sky-blue {
+    background-color: var(--color-divider-sky-blue);
+    height: 4px;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-school-green-light);
+    color: white;
+    transform: translateY(-0.125rem);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline {
+    @apply border-2 border-[--color-school-blue] text-[--color-school-blue] px-6 py-3 
+           rounded-[--radius-button] font-semibold hover:bg-[--color-school-blue] 
+           hover:text-white transition-all duration-300;
+}
+
+.section-padding {
+    @apply py-[--spacing-section] px-[--spacing-container];
+}
+
+.card {
+    @apply bg-[--color-bg-section] rounded-[--radius-card] shadow-lg p-6 
+           hover:shadow-xl transition-shadow duration-300;
+}
+
+.hero-gradient {
+    background: linear-gradient(135deg, var(--color-school-blue) 0%, var(--color-school-blue-light) 100%);
+}
+
+/* Animations */
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.stagger-delay-1 { animation-delay: 0.1s; }
+.stagger-delay-2 { animation-delay: 0.2s; }
+.stagger-delay-3 { animation-delay: 0.3s; }
+.stagger-delay-4 { animation-delay: 0.4s; }
+
+/* Hero Slider Styles */
+.hero-slider-container {
+    position: relative;
+    width: 100%;
+    height: 320px;
+}
+
+.hero-slider-wrapper {
+    display: flex;
+    width: 400%; /* 4 slides * 100% */
+    height: 100%;
+    transition: transform 0.6s ease-in-out;
+}
+
+.hero-slide {
+    width: 25%; /* Each slide takes 25% of wrapper (100% / 4) */
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.hero-dot.active {
+    background-color: white !important;
+    background-opacity: 1 !important;
+    transform: scale(1.2);
+}
+
+.hero-prev:hover,
+.hero-next:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Auto-slide animation */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.hero-slide.active {
+    animation: slideIn 0.6s ease-out;
+}
