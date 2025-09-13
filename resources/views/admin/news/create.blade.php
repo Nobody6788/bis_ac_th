@@ -106,7 +106,7 @@
                         <div class="text-center">
                             <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
                             <h6>Drop image here or click to browse</h6>
-                            <p class="text-muted mb-0">Maximum file size: 2MB</p>
+                            <p class="text-muted mb-0">Maximum file size: 1GB</p>
                             <p class="text-muted">Supported formats: JPEG, PNG, JPG, GIF</p>
                         </div>
                     </div>
@@ -188,7 +188,7 @@
                 <div class="alert alert-warning">
                     <h6><i class="fas fa-exclamation-triangle me-2"></i>Image Guidelines:</h6>
                     <ul class="mb-0 small">
-                        <li>Maximum file size: 2MB</li>
+                        <li>Maximum file size: 1GB</li>
                         <li>Recommended dimensions: 1200x800px</li>
                         <li>Formats: JPEG, PNG, JPG, GIF</li>
                         <li>Use landscape orientation for best results</li>

@@ -2,20 +2,21 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    const ROLE_SUPERADMIN = 'superadmin';
+    const ROLE_ADMIN = 'admin';
+
     use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
@@ -27,7 +28,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -35,7 +36,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
      * @return array<string, string>
      */
@@ -44,22 +45,44 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_approved' => 'boolean',
         ];
     }
 
     /**
-     * Check if user is admin
+     * Get the valid roles.
+     *
+     * @return array<string, string>
      */
-    public function isAdmin(): bool
+    public static function getRoles(): array
     {
-        return $this->role === 'admin';
+        return [
+            self::ROLE_SUPERADMIN => 'Super Admin',
+            self::ROLE_ADMIN => 'Admin',
+        ];
     }
 
     /**
-     * Check if user is regular user
+     * Check if user is a superadmin.
      */
-    public function isUser(): bool
+    public function isSuperAdmin(): bool
     {
-        return $this->role === 'user';
+        return $this->role === self::ROLE_SUPERADMIN;
+    }
+
+    /**
+     * Check if user is an admin or superadmin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN || $this->isSuperAdmin();
+    }
+
+    /**
+     * Check if user is a regular user (not admin or superadmin)
+     */
+    public function isRegularUser(): bool
+    {
+        return !$this->isAdmin() && !$this->isSuperAdmin();
     }
 }

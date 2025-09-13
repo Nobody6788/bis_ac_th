@@ -28,7 +28,25 @@ class GalleryImage extends Model
      */
     public function getImageUrlAttribute(): ?string
     {
-        return $this->image ? Storage::url($this->image) : null;
+        if (!$this->image) {
+            return null;
+        }
+        
+        // Check if the image path is already a full URL
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+        
+        // Generate URL without relying on symbolic link
+        $baseUrl = rtrim(config('app.url'), '/');
+        $storagePath = str_replace('\\', '/', $this->image);
+        
+        // Remove 'public/' prefix if it exists
+        if (strpos($storagePath, 'public/') === 0) {
+            $storagePath = substr($storagePath, 7);
+        }
+        
+        return "{$baseUrl}/storage/{$storagePath}";
     }
 
     /**

@@ -34,6 +34,7 @@ This is a comprehensive school website for Pinnacle International School, showca
 - Composer
 - Node.js (v16+ recommended)
 - NPM or Yarn
+- MySQL or compatible database
 
 ### Installation
 
@@ -62,7 +63,7 @@ This is a comprehensive school website for Pinnacle International School, showca
 5. **Database setup**
    ```bash
    # Configure your database in .env file
-   php artisan migrate
+   php artisan migrate --seed
    ```
 
 6. **Build assets and start development**
@@ -75,6 +76,11 @@ This is a comprehensive school website for Pinnacle International School, showca
    php artisan serve    # Development server
    ```
 
+7. **Create storage link for public file access**
+   ```bash
+   php artisan storage:link
+   ```
+
 ### Development Commands
 
 - `composer run dev` - Start all development services (server, queue, logs, vite)
@@ -82,6 +88,19 @@ This is a comprehensive school website for Pinnacle International School, showca
 - `npm run dev` - Start Vite development server with hot reload
 - `php artisan serve` - Start Laravel development server
 - `composer run test` - Run tests with configuration clearing
+- `./vendor/bin/pint` - Format code with Laravel Pint
+- `php artisan cache:clear` - Clear application cache
+- `php artisan view:clear` - Clear view cache
+
+### Admin Access
+
+1. After running seeders, use the default admin account:
+   - Email: admin@example.com
+   - Password: password
+
+2. Access the admin dashboard at `/admin`
+
+3. Change the default password immediately after first login
 
 ## Project Structure
 
@@ -89,39 +108,115 @@ This is a comprehensive school website for Pinnacle International School, showca
 project1/
 ├── app/
 │   ├── Http/Controllers/     # Request handling logic
+│   │   ├── Admin/            # Admin controllers
+│   │   │   ├── AdminController.php       # Dashboard
+│   │   │   ├── ContentController.php     # Content management
+│   │   │   ├── GalleryController.php     # Gallery management
+│   │   │   ├── NewsController.php        # News management
+│   │   │   ├── ProgramController.php     # Programs management
+│   │   │   ├── SiteImageController.php   # Site images management
+│   │   │   ├── StaffController.php       # Staff management
+│   │   │   └── UserController.php        # User management
+│   │   ├── Auth/             # Authentication controllers
 │   │   ├── HomeController.php
 │   │   └── HomepageController.php
 │   ├── Models/              # Database models
-│   │   └── User.php
+│   │   ├── ContentSection.php  # Dynamic content management
+│   │   ├── GalleryImage.php    # Gallery images
+│   │   ├── NewsItem.php        # News articles
+│   │   ├── Program.php         # Academic programs
+│   │   ├── SiteImage.php       # Website section images
+│   │   ├── Staff.php           # Staff profiles
+│   │   └── User.php            # User accounts
+│   ├── Http/Middleware/     # Request middleware
+│   │   ├── AdminMiddleware.php  # Admin access control
+│   │   └── LocaleMiddleware.php # Language handling
 │   └── Providers/           # Service providers
 ├── resources/
 │   ├── views/               # Blade templates
-│   │   ├── layouts/
+│   │   ├── admin/           # Admin panel views
+│   │   ├── layouts/         # Layout templates
+│   │   ├── components/      # Reusable components
 │   │   ├── homepage.blade.php  # Main school website
+│   │   ├── staff.blade.php     # Staff page
+│   │   ├── gallery.blade.php   # Gallery page
+│   │   ├── news.blade.php      # News page
 │   │   └── welcome.blade.php   # Laravel welcome page
+│   ├── lang/                # Language translations
+│   │   ├── en/              # English translations
+│   │   ├── th/              # Thai translations
+│   │   └── ko/              # Korean translations
 │   ├── css/                 # Stylesheets
 │   └── js/                  # JavaScript files
 ├── routes/
-│   └── web.php              # Web routes definition
+│   ├── web.php              # Public website routes
+│   ├── admin.php            # Admin panel routes
+│   └── auth.php             # Authentication routes
 ├── database/
 │   ├── migrations/          # Database schema
+│   ├── seeders/             # Database seeders
 │   └── factories/           # Model factories
 └── public/                  # Web root
 ```
 
+## Database
+
+### Data Models
+
+- **User Management** 
+  - `users` - Authentication and role-based access control (admin, superadmin)
+  - `password_reset_tokens` - Password reset functionality
+  - `sessions` - User session management
+
+- **Content Management**
+  - `content_sections` - Dynamic content for website sections with multilingual support
+  - `news_items` - School news articles with publishing controls
+  - `programs` - Academic program information
+  - `staff` - Teacher and staff profiles
+
+- **Media Management**
+  - `gallery_images` - Photo gallery with categories and featured image flags
+  - `site_images` - Website section images (hero, about, programs, etc.)
+
+- **System Tables**
+  - Cache and job queue tables for Laravel's built-in systems
+  - Failed jobs tracking
+
+### Data Features
+
+- **Factories and Seeders** - Sample data for development and testing
+- **Eloquent ORM** - Object-relational mapping for database interactions
+- **Migrations** - Version-controlled database schema
+
 ## Features Overview
 
 ### 🎓 School Website Sections
-- **Hero Section** - Engaging introduction with key statistics
-- **Programs** - Academic programs by grade level (K1-G12)
-- **About** - School information and history
-- **Gallery** - Photo showcase of facilities
-- **News & Events** - Latest school updates
-- **Admissions** - Application process and requirements
-- **Contact** - Contact form and school information
+- **Hero Section** - Engaging introduction with dynamic content management and multilingual support
+- **Programs** - Academic programs by grade level (K1-G12) with customizable content and images
+- **About** - School information and history with editable content sections
+- **Gallery** - Photo showcase with featured images, categories, and filtering capabilities
+- **News & Events** - Latest school updates with publishing controls and content management
+- **Staff** - Teacher profiles with customizable information and sorting
+- **Admissions** - Application process and requirements with editable content
+- **Contact** - Contact form and school information with configurable details
 
 ### 🌐 Technical Highlights
 - **Responsive Design** - Mobile-first approach with Tailwind CSS
+- **Content Management System** - Dynamic content editing for all website sections
+- **Image Management** - Dedicated systems for gallery images and site-specific images
+- **Multilingual Support** - Full translation capabilities for English, Thai, and Korean
+- **Admin Dashboard** - Comprehensive statistics and management interface
+
+### 👩‍💼 Admin Features
+- **Dashboard** - Overview with statistics and quick access to management sections
+- **Content Management** - Edit website content with section-based organization
+- **News Management** - Create, edit, and publish school news articles
+- **Gallery Management** - Upload, categorize, and feature images in the gallery
+- **Site Images** - Manage images for specific website sections (hero, about, etc.)
+- **Staff Management** - Add and edit teacher profiles with position and bio
+- **Programs Management** - Create and update academic program information
+- **User Management** - Control admin access with role-based permissions
+- **Debug Content** - Developer tools for content troubleshooting
 - **Performance Optimized** - Vite for fast builds and hot reload
 - **SEO Ready** - Proper meta tags and structured content
 - **Multilingual Ready** - Translation system prepared
@@ -152,15 +247,43 @@ project1/
 - Tailwind CSS configuration in root directory
 - Color scheme and themes in CSS variables
 
-### Content
-- Update school information in `resources/views/homepage.blade.php`
-- Modify routes in `routes/web.php`
-- Add new controllers in `app/Http/Controllers/`
+### Content Management
+- **Content Sections** - Edit dynamic content through the admin interface
+  - Section keys for different website areas (hero, about, admissions, etc.)
+  - Support for HTML, Markdown, and plain text content types
+  - Multilingual content with language-specific versions
+
+- **News Articles** - Manage school news through the admin interface
+  - Publishing controls (draft/published status)
+  - Featured image upload
+  - Multilingual content support
+
+- **Programs** - Update academic programs through the admin interface
+  - Program details with rich text content
+  - Custom images for each program
+  - Ordering control for display sequence
+
+- **Staff Profiles** - Manage teacher information through the admin interface
+  - Name, position, and biography fields
+  - Profile image upload
+  - Custom sort order for display sequence
+
+### Media Management
+- **Gallery Images** - Upload and organize photos through the admin interface
+  - Category assignment for filtering
+  - Featured flag for homepage display
+  - Image optimization and thumbnail generation
+
+- **Site Images** - Manage website section images through the admin interface
+  - Dedicated images for specific website sections
+  - Recommended image sizes for each section
+  - Image optimization and responsive versions
 
 ### Configuration
 - Environment settings in `.env`
 - App configuration in `config/` directory
 - Database settings in `config/database.php`
+- Languages configuration in `lang/` directory
 
 ## Deployment
 
@@ -179,12 +302,41 @@ project1/
 
 ## Technology Stack
 
-- **Backend**: Laravel 12.0, PHP 8.2+
-- **Frontend**: Vite, Tailwind CSS 4.0, Axios
-- **Database**: MySQL/PostgreSQL/SQLite support
-- **Testing**: PHPUnit
-- **Code Quality**: Laravel Pint
-- **Development**: Laravel Sail (Docker), Concurrently
+### Backend
+- **Framework**: Laravel 12.0 (PHP 8.2+)
+- **Authentication**: Laravel Breeze with customized admin access control
+- **File Storage**: Laravel Filesystem with public disk configuration
+- **Caching**: Laravel built-in cache system
+- **Queues**: Laravel job queue system for background processing
+
+### Frontend
+- **Templates**: Blade templating engine with components and layouts
+- **CSS Framework**: Tailwind CSS 4.0 with custom configuration
+- **JavaScript**: Axios for API requests, Alpine.js for interactive UI components
+- **Build Tool**: Vite for fast builds and hot module replacement
+- **Responsive Design**: Mobile-first approach with Tailwind breakpoints
+
+### Database
+- **RDBMS**: MySQL/PostgreSQL/SQLite support
+- **ORM**: Laravel Eloquent with model relationships
+- **Migrations**: Version-controlled database schema
+- **Seeders**: Sample data generation for development
+
+### Multilingual
+- **Localization**: Laravel's built-in localization system
+- **Languages**: English, Thai, and Korean translations
+- **Middleware**: Custom locale middleware for language switching
+
+### Testing & Quality
+- **Unit Testing**: PHPUnit for backend testing
+- **Code Formatting**: Laravel Pint (PHP CS Fixer)
+- **Static Analysis**: Code quality tools
+
+### Development Tools
+- **Package Manager**: Composer for PHP dependencies
+- **Frontend Dependencies**: NPM for JavaScript packages
+- **Version Control**: Git with conventional commit messages
+- **Environment**: Laravel Sail (Docker) for containerized development, Concurrently
 
 ## License
 

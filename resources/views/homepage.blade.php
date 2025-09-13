@@ -4,6 +4,11 @@
 @section('description', 'Boston International School Chiangmai provides world-class education with innovative teaching methods, diverse programs, and a commitment to developing future leaders.')
 
 @section('content')
+@php
+    use App\Models\ContentSection;
+    use App\Models\SiteImage;
+    use Illuminate\Support\Str;
+@endphp
 <!-- Hero Section -->
 <section class="bg-white relative overflow-hidden">
     <!-- Background Elements -->
@@ -16,15 +21,14 @@
             <!-- Hero Content -->
             <div class="text-gray-900 animate-on-scroll">
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                    <span data-translate="hero.title.inspiring">Inspiring</span> 
-                    <span class="text-[--color-school-gold]" data-translate="hero.title.excellence">Excellence</span>,
-                    <br><span data-translate="hero.title.nurturing">Nurturing</span> 
-                    <span class="text-[--color-school-green-light]" data-translate="hero.title.citizens">Global Citizens</span>
+                    <span data-translate="hero.title.inspiring">{{ __('frontend.hero.title.inspiring') }}</span> 
+                    <span class="text-[--color-school-gold]" data-translate="hero.title.excellence">{{ __('frontend.hero.title.excellence') }}</span>,
+                    <br><span data-translate="hero.title.nurturing">{{ __('frontend.hero.title.nurturing') }}</span> 
+                    <span class="text-[--color-school-green-light]" data-translate="hero.title.citizens">{{ __('frontend.hero.title.citizens') }}</span>
                 </h1>
                 
                 <p class="text-xl lg:text-2xl mb-8 max-w-2xl text-gray-700" data-translate="hero.description">
-                    At Boston International School Chiangmai, we empower students to become innovative thinkers, 
-                    compassionate leaders, and responsible global citizens through world-class education.
+                    {{ __('frontend.hero.description') }}
                 </p>
                 
                 <!-- Key Stats -->
@@ -50,56 +54,112 @@
                     <!-- Slider Container -->
                     <div class="hero-slider-container relative overflow-hidden rounded-lg">
                         <div class="hero-slider-wrapper flex transition-transform duration-500 ease-in-out">
-                            <!-- Slide 1 -->
+                            <!-- Slide 1: Academic Excellence -->
                             <div class="hero-slide w-full flex-shrink-0">
-                                <div class="w-full h-80 bg-gradient-to-br from-blue-100 to-blue-300 flex items-center justify-center rounded-lg">
-                                    <div class="text-center text-blue-800">
-                                        <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                                        </svg>
-                                        <p class="text-lg font-semibold">Academic Excellence</p>
-                                        <p class="text-sm">Students in Learning Environment</p>
+                                @php $slide1 = SiteImage::getByLocation('hero-slide-1'); @endphp
+                                @if($slide1)
+                                    <div class="w-full h-80 relative rounded-lg overflow-hidden">
+                                        <img src="{{ $slide1->image_url }}" alt="{{ $slide1->alt_text ?: 'Academic Excellence' }}" 
+                                             class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-blue-900 bg-opacity-30 flex items-center justify-center">
+                                            <div class="text-center text-white">
+                                                <p class="text-lg font-semibold mb-1">Academic Excellence</p>
+                                                <p class="text-sm opacity-90">Students in Learning Environment</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="w-full h-80 bg-gradient-to-br from-blue-100 to-blue-300 flex items-center justify-center rounded-lg">
+                                        <div class="text-center text-blue-800">
+                                            <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                            </svg>
+                                            <p class="text-lg font-semibold">Academic Excellence</p>
+                                            <p class="text-sm">Students in Learning Environment</p>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                             
-                            <!-- Slide 2 -->
+                            <!-- Slide 2: Sports & Activities -->
                             <div class="hero-slide w-full flex-shrink-0">
-                                <div class="w-full h-80 bg-gradient-to-br from-green-100 to-green-300 flex items-center justify-center rounded-lg">
-                                    <div class="text-center text-green-800">
-                                        <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                                        </svg>
-                                        <p class="text-lg font-semibold">Sports & Activities</p>
-                                        <p class="text-sm">Active Student Life</p>
+                                @php $slide2 = SiteImage::getByLocation('hero-slide-2'); @endphp
+                                @if($slide2)
+                                    <div class="w-full h-80 relative rounded-lg overflow-hidden">
+                                        <img src="{{ $slide2->image_url }}" alt="{{ $slide2->alt_text ?: 'Sports & Activities' }}" 
+                                             class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-green-900 bg-opacity-30 flex items-center justify-center">
+                                            <div class="text-center text-white">
+                                                <p class="text-lg font-semibold mb-1">Sports & Activities</p>
+                                                <p class="text-sm opacity-90">Active Student Life</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="w-full h-80 bg-gradient-to-br from-green-100 to-green-300 flex items-center justify-center rounded-lg">
+                                        <div class="text-center text-green-800">
+                                            <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                            </svg>
+                                            <p class="text-lg font-semibold">Sports & Activities</p>
+                                            <p class="text-sm">Active Student Life</p>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                             
-                            <!-- Slide 3 -->
+                            <!-- Slide 3: Arts & Creativity -->
                             <div class="hero-slide w-full flex-shrink-0">
-                                <div class="w-full h-80 bg-gradient-to-br from-yellow-100 to-yellow-300 flex items-center justify-center rounded-lg">
-                                    <div class="text-center text-yellow-800">
-                                        <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0L7 21h10l-1-17M9 9v6m6-6v6"/>
-                                        </svg>
-                                        <p class="text-lg font-semibold">Arts & Creativity</p>
-                                        <p class="text-sm">Creative Expression</p>
+                                @php $slide3 = SiteImage::getByLocation('hero-slide-3'); @endphp
+                                @if($slide3)
+                                    <div class="w-full h-80 relative rounded-lg overflow-hidden">
+                                        <img src="{{ $slide3->image_url }}" alt="{{ $slide3->alt_text ?: 'Arts & Creativity' }}" 
+                                             class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-yellow-900 bg-opacity-30 flex items-center justify-center">
+                                            <div class="text-center text-white">
+                                                <p class="text-lg font-semibold mb-1">Arts & Creativity</p>
+                                                <p class="text-sm opacity-90">Creative Expression</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="w-full h-80 bg-gradient-to-br from-yellow-100 to-yellow-300 flex items-center justify-center rounded-lg">
+                                        <div class="text-center text-yellow-800">
+                                            <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0L7 21h10l-1-17M9 9v6m6-6v6"/>
+                                            </svg>
+                                            <p class="text-lg font-semibold">Arts & Creativity</p>
+                                            <p class="text-sm">Creative Expression</p>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                             
-                            <!-- Slide 4 -->
+                            <!-- Slide 4: Global Citizenship -->
                             <div class="hero-slide w-full flex-shrink-0">
-                                <div class="w-full h-80 bg-gradient-to-br from-purple-100 to-purple-300 flex items-center justify-center rounded-lg">
-                                    <div class="text-center text-purple-800">
-                                        <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                        <p class="text-lg font-semibold">Global Citizenship</p>
-                                        <p class="text-sm">Diverse Community</p>
+                                @php $slide4 = SiteImage::getByLocation('hero-slide-4'); @endphp
+                                @if($slide4)
+                                    <div class="w-full h-80 relative rounded-lg overflow-hidden">
+                                        <img src="{{ $slide4->image_url }}" alt="{{ $slide4->alt_text ?: 'Global Citizenship' }}" 
+                                             class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-purple-900 bg-opacity-30 flex items-center justify-center">
+                                            <div class="text-center text-white">
+                                                <p class="text-lg font-semibold mb-1">Global Citizenship</p>
+                                                <p class="text-sm opacity-90">Diverse Community</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="w-full h-80 bg-gradient-to-br from-purple-100 to-purple-300 flex items-center justify-center rounded-lg">
+                                        <div class="text-center text-purple-800">
+                                            <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <p class="text-lg font-semibold">Global Citizenship</p>
+                                            <p class="text-sm">Diverse Community</p>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         
@@ -138,11 +198,10 @@
         <!-- Section Header -->
         <div class="text-center mb-16 animate-on-scroll">
             <h2 class="text-3xl lg:text-4xl font-bold text-[--color-text-primary] mb-6" data-translate="programs.title">
-                Boston International School Chiangmai Features
+                {{ __('frontend.programs.title') }}
             </h2>
             <p class="text-xl text-[--color-text-secondary] max-w-3xl mx-auto" data-translate="programs.subtitle">
-                Our comprehensive programs and innovative approach to education prepare students 
-                for success in an ever-changing global landscape.
+                {{ __('frontend.programs.subtitle') }}
             </p>
         </div>
         
@@ -304,17 +363,15 @@
             <!-- About Content -->
             <div class="animate-on-scroll">
                 <h2 class="text-3xl lg:text-4xl font-bold text-[--color-text-primary] mb-6" data-translate="about.title">
-                    What is Boston International School Chiangmai?
+                    {{ ContentSection::getContent('about.title', 'What is Boston International School Chiangmai?') }}
                 </h2>
                 
                 <p class="text-lg text-[--color-text-secondary] mb-6" data-translate="about.desc1">
-                    Founded in 1999, Boston International School Chiangmai has been at the forefront of innovative education, 
-                    nurturing students from over 40 nationalities to become confident, creative, and caring global citizens.
+                    {{ ContentSection::getContent('about.desc1', 'Founded in 1999, Boston International School Chiangmai has been at the forefront of innovative education, nurturing students from over 40 nationalities to become confident, creative, and caring global citizens.') }}
                 </p>
                 
                 <p class="text-lg text-[--color-text-secondary] mb-8" data-translate="about.desc2">
-                    Our comprehensive curriculum combines the best of international educational practices with 
-                    local cultural understanding, preparing students for success in an interconnected world.
+                    {{ ContentSection::getContent('about.desc2', 'Our comprehensive curriculum combines the best of international educational practices with local cultural understanding, preparing students for success in an interconnected world.') }}
                 </p>
                 
                 <div class="grid grid-cols-2 gap-6 mb-8">
@@ -370,6 +427,60 @@
             </p>
         </div>
         
+        @if($recentGalleryImages && $recentGalleryImages->count() > 0)
+        <!-- Photo Gallery Slider -->
+        <div class="photo-gallery-container relative max-w-6xl mx-auto mb-12 animate-on-scroll">
+            <div class="relative overflow-hidden rounded-2xl shadow-2xl bg-white">
+                <div class="photo-gallery-slider flex transition-transform duration-700 ease-in-out" style="width: {{ $recentGalleryImages->count() * 100 }}%">
+                    @foreach($recentGalleryImages as $index => $image)
+                    <div class="photo-gallery-slide flex-shrink-0 relative" style="width: {{ 100 / $recentGalleryImages->count() }}%">
+                        <div class="aspect-w-16 aspect-h-9">
+                            <img src="{{ $image->image_url }}" 
+                                 alt="{{ $image->title }}" 
+                                 class="w-full h-96 object-cover">
+                        </div>
+                        
+                        <!-- Image Overlay Info -->
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8">
+                            <div class="text-white">
+                                @if($image->category)
+                                <span class="inline-block px-3 py-1 text-sm font-semibold bg-white/20 backdrop-blur-sm rounded-full mb-3">
+                                    {{ ucfirst($image->category) }}
+                                </span>
+                                @endif
+                                <h3 class="text-2xl font-bold mb-2">{{ $image->title }}</h3>
+                                @if($image->description)
+                                <p class="text-gray-200 text-lg opacity-90">{{ Str::limit($image->description, 120) }}</p>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <!-- Slide Number Indicator -->
+                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium">
+                            {{ $index + 1 }} / {{ $recentGalleryImages->count() }}
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+                    <div class="progress-bar h-full bg-white transition-all duration-75 ease-linear" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <!-- Slide Indicators -->
+            <div class="flex justify-center mt-6 space-x-2">
+                @foreach($recentGalleryImages as $index => $image)
+                <button class="slide-indicator w-3 h-3 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-[--color-school-blue] scale-125' : 'bg-gray-300 hover:bg-gray-400' }}" 
+                        data-slide="{{ $index }}"
+                        aria-label="Go to slide {{ $index + 1 }}">
+                </button>
+                @endforeach
+            </div>
+        </div>
+        @else
+        <!-- Fallback when no images available -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             <div class="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 animate-on-scroll">
                 <div class="w-full h-64 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
@@ -404,9 +515,10 @@
                 </div>
             </div>
         </div>
+        @endif
         
         <div class="text-center animate-on-scroll">
-            <a href="#contact" class="btn-primary">Take a Virtual Tour</a>
+            <a href="{{ route('gallery') }}" class="btn-primary">View Full Gallery</a>
         </div>
     </div>
 </section>
@@ -427,159 +539,105 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="card animate-on-scroll">
-                <div class="w-full h-48 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg mb-4 flex items-center justify-center">
-                    <svg class="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/>
-                    </svg>
-                </div>
-                <div class="text-sm text-[--color-school-blue] font-semibold mb-2">Academic Excellence</div>
-                <h3 class="text-xl font-semibold text-[--color-text-primary] mb-3">IB Diploma Results 2024</h3>
-                <p class="text-[--color-text-secondary] mb-4">
-                    Our students achieved outstanding results in the IB Diploma Programme with 98% pass rate and average score of 38 points.
-                </p>
-                <a href="#" class="text-[--color-school-blue] font-medium hover:underline">Read More →</a>
-            </div>
-            
-            <div class="card animate-on-scroll stagger-delay-2">
-                <div class="w-full h-48 bg-gradient-to-br from-green-100 to-green-200 rounded-lg mb-4 flex items-center justify-center">
-                    <svg class="w-16 h-16 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0A2.704 2.704 0 013 15.546L3 12l1.5-.5L6 11l1.5.5L9 12l1.5-.5L12 11l1.5.5L15 12l1.5-.5L18 11l1.5.5L21 12v3.546z"/>
-                    </svg>
-                </div>
-                <div class="text-sm text-[--color-school-green] font-semibold mb-2">Sports Achievement</div>
-                <h3 class="text-xl font-semibold text-[--color-text-primary] mb-3">Swimming Championship</h3>
-                <p class="text-[--color-text-secondary] mb-4">
-                    Our swim team won the International Schools Swimming Championship for the third consecutive year.
-                </p>
-                <a href="#" class="text-[--color-school-green] font-medium hover:underline">Read More →</a>
-            </div>
-            
-            <div class="card animate-on-scroll stagger-delay-3">
-                <div class="w-full h-48 bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg mb-4 flex items-center justify-center">
-                    <svg class="w-16 h-16 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                </div>
-                <div class="text-sm text-[--color-school-gold] font-semibold mb-2">Upcoming Event</div>
-                <h3 class="text-xl font-semibold text-[--color-text-primary] mb-3">Open House 2024</h3>
-                <p class="text-[--color-text-secondary] mb-4">
-                    Join us for our annual Open House on September 15th, 2024. Experience our innovative learning environment.
-                </p>
-                <a href="#" class="text-[--color-school-gold] font-medium hover:underline">Learn More →</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Section Divider -->
-<div class="section-divider-blue"></div>
-
-<!-- Admissions Section -->
-<section id="admissions" class="section-padding bg-[--color-bg-section]">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div class="animate-on-scroll">
-                <h2 class="text-3xl lg:text-4xl font-bold text-[--color-text-primary] mb-6">
-                    Welcome to Boston International School Chiangmai Admissions
-                </h2>
-                <p class="text-lg text-[--color-text-secondary] mb-6">
-                    We welcome students from diverse backgrounds who are eager to learn, grow, and contribute to our global community.
-                </p>
-                
-                <div class="space-y-4 mb-8">
-                    <h3 class="text-xl font-semibold text-[--color-text-primary]">How to Apply</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-start space-x-3">
-                            <div class="w-6 h-6 bg-[--color-school-blue] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                                <span class="text-white text-sm font-bold">1</span>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-[--color-text-primary]">Submit Online Application</h4>
-                                <p class="text-[--color-text-secondary] text-sm">Complete our comprehensive online application form.</p>
-                            </div>
+            @forelse($recentNews as $index => $newsItem)
+                <div class="card animate-on-scroll {{ $index === 1 ? 'stagger-delay-2' : ($index === 2 ? 'stagger-delay-3' : '') }}">
+                    @if($newsItem->image_url)
+                        <div class="w-full h-48 rounded-lg mb-4 overflow-hidden">
+                            <img src="{{ $newsItem->image_url }}" alt="{{ $newsItem->title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                         </div>
-                        
-                        <div class="flex items-start space-x-3">
-                            <div class="w-6 h-6 bg-[--color-school-green] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                                <span class="text-white text-sm font-bold">2</span>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-[--color-text-primary]">Assessment & Interview</h4>
-                                <p class="text-[--color-text-secondary] text-sm">Participate in assessments and family interviews.</p>
-                            </div>
+                    @else
+                        <!-- Default gradient background based on category -->
+                        @php
+                            $gradients = [
+                                'academic' => 'from-blue-100 to-blue-200',
+                                'sports' => 'from-green-100 to-green-200',
+                                'events' => 'from-purple-100 to-purple-200',
+                                'announcements' => 'from-yellow-100 to-yellow-200',
+                                'achievements' => 'from-orange-100 to-orange-200'
+                            ];
+                            $gradient = $gradients[$newsItem->category] ?? 'from-gray-100 to-gray-200';
+                            
+                            $iconColors = [
+                                'academic' => 'text-blue-600',
+                                'sports' => 'text-green-600',
+                                'events' => 'text-purple-600',
+                                'announcements' => 'text-yellow-600',
+                                'achievements' => 'text-orange-600'
+                            ];
+                            $iconColor = $iconColors[$newsItem->category] ?? 'text-gray-600';
+                            
+                            $icons = [
+                                'academic' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253',
+                                'sports' => 'M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0A2.704 2.704 0 013 15.546L3 12l1.5-.5L6 11l1.5.5L9 12l1.5-.5L12 11l1.5.5L15 12l1.5-.5L18 11l1.5.5L21 12v3.546z',
+                                'events' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+                                'announcements' => 'M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z',
+                                'achievements' => 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z'
+                            ];
+                            $iconPath = $icons[$newsItem->category] ?? 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z';
+                        @endphp
+                        <div class="w-full h-48 bg-gradient-to-br {{ $gradient }} rounded-lg mb-4 flex items-center justify-center">
+                            <svg class="w-16 h-16 {{ $iconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $iconPath }}"/>
+                            </svg>
                         </div>
-                        
-                        <div class="flex items-start space-x-3">
-                            <div class="w-6 h-6 bg-[--color-school-gold] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                                <span class="text-white text-sm font-bold">3</span>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-[--color-text-primary]">Enrollment Decision</h4>
-                                <p class="text-[--color-text-secondary] text-sm">Receive admission decision and complete enrollment.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#contact" class="btn-primary">Start Application</a>
-                    <a href="#" class="btn-outline">Download Brochure</a>
-                </div>
-            </div>
-            
-            <div class="animate-on-scroll stagger-delay-2">
-                <div class="bg-[--color-bg-light] rounded-2xl p-8">
-                    <h3 class="text-2xl font-bold text-[--color-text-primary] mb-6 text-center">
-                        Admission Requirements
-                    </h3>
+                    @endif
                     
-                    <div class="space-y-6">
-                        <div class="border-l-4 border-[--color-school-blue] pl-4">
-                            <h4 class="font-semibold text-[--color-text-primary] mb-2">Early Years (K1-K3)</h4>
-                            <ul class="text-[--color-text-secondary] text-sm space-y-1">
-                                <li>• Birth certificate</li>
-                                <li>• Immunization records</li>
-                                <li>• Previous school reports (if applicable)</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="border-l-4 border-[--color-school-green] pl-4">
-                            <h4 class="font-semibold text-[--color-text-primary] mb-2">Primary & Secondary</h4>
-                            <ul class="text-[--color-text-secondary] text-sm space-y-1">
-                                <li>• Academic transcripts (2 years)</li>
-                                <li>• English proficiency assessment</li>
-                                <li>• Teacher recommendations</li>
-                                <li>• Personal statement</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="bg-white rounded-lg p-4 border">
-                            <h4 class="font-semibold text-[--color-text-primary] mb-2">Application Deadlines</h4>
-                            <div class="text-sm text-[--color-text-secondary]">
-                                <p><strong>August Start:</strong> April 30th</p>
-                                <p><strong>January Start:</strong> October 31st</p>
-                            </div>
-                        </div>
+                    @if($newsItem->category)
+                        @php
+                            $categoryColors = [
+                                'academic' => 'text-[--color-school-blue]',
+                                'sports' => 'text-[--color-school-green]',
+                                'events' => 'text-[--color-school-gold]',
+                                'announcements' => 'text-yellow-600',
+                                'achievements' => 'text-orange-600'
+                            ];
+                            $categoryColor = $categoryColors[$newsItem->category] ?? 'text-gray-600';
+                        @endphp
+                        <div class="text-sm {{ $categoryColor }} font-semibold mb-2">{{ ucfirst($newsItem->category) }}</div>
+                    @endif
+                    
+                    <h3 class="text-xl font-semibold text-[--color-text-primary] mb-3">{{ $newsItem->title }}</h3>
+                    <p class="text-[--color-text-secondary] mb-4">
+                        {{ $newsItem->excerpt ?: Str::limit(strip_tags($newsItem->content), 120) }}
+                    </p>
+                    
+                    <div class="flex items-center justify-between">
+                        <a href="{{ route('news') }}" class="{{ $categoryColor ?? 'text-[--color-school-blue]' }} font-medium hover:underline">Read More →</a>
+                        @if($newsItem->published_at)
+                            <span class="text-xs text-gray-500">{{ $newsItem->published_at->format('M j, Y') }}</span>
+                        @endif
                     </div>
                 </div>
-            </div>
+            @empty
+                <!-- Fallback content when no news items exist -->
+                <div class="card animate-on-scroll">
+                    <div class="w-full h-48 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg mb-4 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/>
+                        </svg>
+                    </div>
+                    <div class="text-sm text-[--color-school-blue] font-semibold mb-2">Welcome</div>
+                    <h3 class="text-xl font-semibold text-[--color-text-primary] mb-3">Latest School News</h3>
+                    <p class="text-[--color-text-secondary] mb-4">
+                        Stay tuned for the latest updates and announcements from Boston International School Chiangmai.
+                    </p>
+                    <a href="{{ route('news') }}" class="text-[--color-school-blue] font-medium hover:underline">Visit News Page →</a>
+                </div>
+            @endforelse
         </div>
     </div>
 </section>
 
-<!-- Section Divider -->
-<div class="section-divider-sky-blue"></div>
 
 <!-- Contact Section -->
-<section id="contact" class="section-padding bg-[--color-bg-light]">
+<section id="contact" class="section-padding bg-[--color-bg-light] mb-16">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16 animate-on-scroll">
             <h2 class="text-3xl lg:text-4xl font-bold text-[--color-text-primary] mb-6" data-translate="contact.title">
-                Get in Touch
+                {{ ContentSection::getContent('contact.title', 'Get in Touch') }}
             </h2>
             <p class="text-xl text-[--color-text-secondary] max-w-3xl mx-auto" data-translate="contact.subtitle">
-                Ready to start your journey with Boston International School Chiangmai? Contact our admissions team.
+                {{ ContentSection::getContent('contact.subtitle', 'Ready to start your journey with Boston International School Chiangmai? Contact our admissions team.') }}
             </p>
         </div>
         
@@ -627,7 +685,9 @@
                             <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[--color-school-blue] focus:border-transparent" placeholder="Tell us about your interest..."></textarea>
                         </div>
                         
-                        <button type="submit" class="btn-primary w-full" data-translate="contact.form.submit">Send Message</button>
+                        <button type="submit" class="w-full px-6 py-3 bg-blue-900 text-white font-medium rounded-lg hover:bg-blue-800 transition-colors duration-300" data-translate="contact.form.submit">
+    Send Message
+</button>
                     </form>
                 </div>
             </div>

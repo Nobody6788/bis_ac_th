@@ -7,6 +7,7 @@ use App\Models\GalleryImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class GalleryController extends Controller
 {
@@ -36,7 +37,7 @@ class GalleryController extends Controller
             'title' => 'required|max:255',
             'description' => 'nullable|max:500',
             'category' => 'required|in:classrooms,labs,sports,campus,events',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:1048576', // 1GB in KB
             'is_featured' => 'boolean',
             'sort_order' => 'nullable|integer',
         ]);
@@ -76,7 +77,7 @@ class GalleryController extends Controller
             'title' => 'required|max:255',
             'description' => 'nullable|max:500',
             'category' => 'required|in:classrooms,labs,sports,campus,events',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1048576', // 1GB in KB
             'is_featured' => 'boolean',
             'sort_order' => 'nullable|integer',
         ]);
@@ -87,8 +88,34 @@ class GalleryController extends Controller
         // Handle image upload
         if ($request->hasFile('image')) {
             // Delete old image
-            Storage::delete($gallery->image);
-            $data['image'] = $this->uploadImage($request->file('image'));
+            if ($gallery->image) {
+                try {
+                    Storage::delete($gallery->image);
+                } catch (\Exception $e) {
+                    Log::error('Gallery Update: Failed to delete old image.', [
+                        'error_message' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+                }
+            }
+            
+            try {
+                $path = $this->uploadImage($request->file('image'));
+                if (!$path) {
+                    Log::error('Gallery Upload: Failed to store file.', [
+                        'error_message' => 'Failed to store file.',
+                        'trace' => 'Failed to store file.'
+                    ]);
+                    return back()->with('error', 'There was a problem uploading the image. Please check the logs.')->withInput();
+                }
+                $data['image'] = $path;
+            } catch (\Exception $e) {
+                Log::error('Gallery Upload: Failed to store file.', [
+                    'error_message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                return back()->with('error', 'There was a problem uploading the image. Please check the logs.')->withInput();
+            }
         }
 
         $gallery->update($data);
@@ -113,9 +140,27 @@ class GalleryController extends Controller
     /**
      * Upload image and return path
      */
-    private function uploadImage($file)
+        private function uploadImage($file)
     {
+        if (!$file || !$file->isValid()) {
+            Log::error('Gallery Upload: Invalid file provided.');
+            return null;
+        }
+
         $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
-        return $file->storeAs('gallery', $filename, 'public');
+        $path = 'gallery';
+
+        try {
+            Log::info('Gallery Upload: Attempting to store file.', ['filename' => $filename, 'path' => $path]);
+            $storedPath = $file->storeAs($path, $filename, 'public');
+            Log::info('Gallery Upload: File stored successfully.', ['stored_path' => $storedPath]);
+            return $storedPath;
+        } catch (\Exception $e) {
+            Log::error('Gallery Upload: Failed to store file.', [
+                'error_message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return null;
+        }
     }
 }

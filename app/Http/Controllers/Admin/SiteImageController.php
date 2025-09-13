@@ -16,7 +16,8 @@ class SiteImageController extends Controller
     public function index()
     {
         $images = SiteImage::orderBy('location')->orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.site-images.index', compact('images'));
+        $locations = $this->getImageLocations();
+        return view('admin.site-images.index', compact('images', 'locations'));
     }
 
     /**
@@ -24,7 +25,29 @@ class SiteImageController extends Controller
      */
     public function create()
     {
-        return view('admin.site-images.create');
+        $locations = $this->getImageLocations();
+        return view('admin.site-images.create', compact('locations'));
+    }
+
+    /**
+     * Get available image locations with descriptions
+     */
+    private function getImageLocations()
+    {
+        return [
+            'hero-slide-1' => 'Hero Slider - Academic Excellence',
+            'hero-slide-2' => 'Hero Slider - Sports & Activities',
+            'hero-slide-3' => 'Hero Slider - Arts & Creativity',
+            'hero-slide-4' => 'Hero Slider - Global Citizenship',
+            'hero-background' => 'Hero Section Background',
+            'about-section' => 'About Section Image',
+            'programs-section' => 'Programs Section Image',
+            'facilities-section' => 'Facilities Section Image',
+            'footer-banner' => 'Footer Banner Image',
+            'contact-section' => 'Contact Section Image',
+            'banner-main' => 'Main Banner Image',
+            'gallery-featured' => 'Gallery Featured Image'
+        ];
     }
 
     /**
@@ -32,12 +55,15 @@ class SiteImageController extends Controller
      */
     public function store(Request $request)
     {
+        $locations = $this->getImageLocations();
+        $validLocations = array_keys($locations);
+        
         $request->validate([
             'name' => 'required|max:255',
             'description' => 'nullable|max:500',
-            'location' => 'required|in:hero,about,footer,banner',
+            'location' => 'required|in:' . implode(',', $validLocations),
             'alt_text' => 'nullable|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:1048576', // 1GB in KB
             'is_active' => 'boolean',
         ]);
 
@@ -60,7 +86,8 @@ class SiteImageController extends Controller
      */
     public function show(SiteImage $siteImage)
     {
-        return view('admin.site-images.show', compact('siteImage'));
+        $locations = $this->getImageLocations();
+        return view('admin.site-images.show', compact('siteImage', 'locations'));
     }
 
     /**
@@ -68,7 +95,8 @@ class SiteImageController extends Controller
      */
     public function edit(SiteImage $siteImage)
     {
-        return view('admin.site-images.edit', compact('siteImage'));
+        $locations = $this->getImageLocations();
+        return view('admin.site-images.edit', compact('siteImage', 'locations'));
     }
 
     /**
@@ -76,12 +104,15 @@ class SiteImageController extends Controller
      */
     public function update(Request $request, SiteImage $siteImage)
     {
+        $locations = $this->getImageLocations();
+        $validLocations = array_keys($locations);
+        
         $request->validate([
             'name' => 'required|max:255',
             'description' => 'nullable|max:500',
-            'location' => 'required|in:hero,about,footer,banner',
+            'location' => 'required|in:' . implode(',', $validLocations),
             'alt_text' => 'nullable|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1048576', // 1GB in KB
             'is_active' => 'boolean',
         ]);
 

@@ -37,7 +37,7 @@ class NewsController extends Controller
             'content' => 'required',
             'excerpt' => 'nullable|max:500',
             'category' => 'required|in:academic,sports,events,general',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1048576', // 1GB in KB
             'is_published' => 'boolean',
         ]);
 
@@ -85,7 +85,7 @@ class NewsController extends Controller
             'content' => 'required',
             'excerpt' => 'nullable|max:500',
             'category' => 'required|in:academic,sports,events,general',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1048576', // 1GB in KB
             'is_published' => 'boolean',
         ]);
 

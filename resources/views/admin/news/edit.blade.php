@@ -147,7 +147,7 @@
                                     Drop image here or click to browse
                                 @endif
                             </h6>
-                            <p class="text-muted mb-0">Maximum file size: 2MB</p>
+                            <p class="text-muted mb-0">Maximum file size: 1GB</p>
                             <p class="text-muted">Supported formats: JPEG, PNG, JPG, GIF</p>
                         </div>
                     </div>
@@ -263,6 +263,7 @@
             <div class="card-body">
                 <div class="alert alert-info">
                     <ul class="mb-0 small">
+                        <li>Maximum file size: 1GB</li>
                         <li>Changes are saved immediately when you click update</li>
                         <li>Publishing status can be toggled anytime</li>
                         <li>New images replace the current one</li>
